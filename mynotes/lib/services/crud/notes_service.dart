@@ -6,15 +6,16 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart'
     show MissingPlatformDirectoryException, getApplicationSupportDirectory;
+import 'package:test/expect.dart';
 
 class NotesService {
   Database? _db;
 
   List<DatabaseNote> _notes = [];
 
-  //static final NotesService _shared = NotesService._sharedInstance();
-  //NotesService._shared.Instance();
-  //factory NotesService() => _shared;
+  static final NotesService _shared = NotesService._sharedInstance();
+  NotesService._sharedInstance();
+  factory NotesService() => _shared;
 
   final _notesStreamController =
       StreamController<List<DatabaseNote>>.broadcast();
