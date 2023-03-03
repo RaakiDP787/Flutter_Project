@@ -26,7 +26,7 @@ class _NotesViewState extends State<NotesView> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Main UI'),
+          title: const Text('My Notes'),
           actions: [
             IconButton(
               onPressed: () {
@@ -46,7 +46,7 @@ class _NotesViewState extends State<NotesView> {
                         (_) => false,
                       );
                     }
-                    // TODO: Handle this case.
+
                     break;
                 }
               },
@@ -71,6 +71,7 @@ class _NotesViewState extends State<NotesView> {
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.waiting:
+                        return const Text("Waiting for all notes");
                       case ConnectionState.active:
                         if (snapshot.hasData) {
                           final allNotes = snapshot.data as List<DatabaseNote>;
@@ -91,6 +92,7 @@ class _NotesViewState extends State<NotesView> {
                         } else {
                           return const CircularProgressIndicator();
                         }
+
                       default:
                         return const CircularProgressIndicator();
                     }

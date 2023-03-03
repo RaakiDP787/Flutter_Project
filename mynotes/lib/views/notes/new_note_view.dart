@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:mynotes/services/auth/auth_service.dart';
-import 'package:mynotes/services/auth/auth_user.dart';
 import 'package:mynotes/services/crud/notes_service.dart';
 
 class NewNoteView extends StatefulWidget {
@@ -90,7 +87,7 @@ class _NewNoteViewState extends State<NewNoteView> {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
                 _note = snapshot.data as DatabaseNote?;
-                //_setupTextControllerListener();
+                _setupTextControllerListener();
                 return TextField(
                   controller: _textController,
                   keyboardType: TextInputType.multiline,

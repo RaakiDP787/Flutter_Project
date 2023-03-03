@@ -17,7 +17,6 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     _email = TextEditingController();
     _password = TextEditingController();
     super.initState();
@@ -25,7 +24,6 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _email.dispose();
     _password.dispose();
     super.dispose();
@@ -81,7 +79,7 @@ class _RegisterViewState extends State<RegisterView> {
                 );
               }
             },
-            child: Text('Register'),
+            child: const Text('Register'),
           ),
           TextButton(
             onPressed: () {
@@ -90,7 +88,7 @@ class _RegisterViewState extends State<RegisterView> {
                 (route) => false,
               );
             },
-            child: Text('Already Registered. Login here!'),
+            child: const Text('Already Registered. Login here!'),
           ),
         ],
       ),
