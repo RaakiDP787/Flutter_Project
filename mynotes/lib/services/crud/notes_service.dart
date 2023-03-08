@@ -7,6 +7,30 @@ import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart'
     show MissingPlatformDirectoryException, getApplicationSupportDirectory;
 
+const dbName = 'notes.db';
+const noteTable = 'note';
+const userTable = 'user';
+const idColumn = 'id';
+const emailColumn = 'email';
+const userIdColumn = 'user_id';
+const textColumn = 'text';
+const isSyncedWithCloudColumn = 'is_synced_with_cloud';
+const createUserTable = '''
+       CREATE TABLE IF NOT EXISTS "user" (
+	      "id"	INTEGER NOT NULL,
+	      "email"	TEXT UNIQUE,
+	      PRIMARY KEY("id" AUTOINCREMENT)
+      );''';
+const createNoteTable = '''
+  CREATE TABLE IF NOT EXISTS "note" (
+	  "id"	INTEGER NOT NULL,
+	  "user_id"	INTEGER,
+	  "text"	TEXT,
+	  "is_synced_with_cloud"	INTEGER,
+	  FOREIGN KEY("user_id") REFERENCES "user"("id"),
+	  PRIMARY KEY("id")
+    );''';
+
 class NotesService {
   Database? _db;
 
@@ -77,9 +101,10 @@ class NotesService {
   }
 
   Future<DatabaseUser> getUser({required String email}) async {
+    await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     final results = await db.query(userTable,
-        limit: 1, where: 'email : ?', whereArgs: [email.toLowerCase()]);
+        limit: 1, where: 'email = ?', whereArgs: [email.toLowerCase()]);
 
     if (results.isEmpty) {
       throw CoundNotFindUser();
@@ -210,7 +235,7 @@ class NotesService {
   }
 
   Future<void> open() async {
-    if (_db == null) {
+    if (_db != null) {
       throw DatabaseAlreadyOpenException();
     }
     try {
@@ -220,10 +245,10 @@ class NotesService {
       _db = db;
 
       //create User Table
-      db.execute(createUserTable);
+      await db.execute(createUserTable);
 
       //create Note Table
-      db.execute(createNoteTable);
+      await db.execute(createNoteTable);
       await _cacheNotes();
     } on MissingPlatformDirectoryException {
       throw UnableToGetDocumentsDirectory();
@@ -282,27 +307,3 @@ class DatabaseNote {
   @override
   int get hashCode => id.hashCode;
 }
-
-const dbName = 'notes.db';
-const noteTable = 'note';
-const userTable = 'user';
-const idColumn = 'id';
-const emailColumn = 'email';
-const userIdColumn = 'user_id';
-const textColumn = 'text';
-const isSyncedWithCloudColumn = 'is_synced_with_cloud';
-const createUserTable = '''
-       CREATE TABLE "user" (
-	      "id"	INTEGER NOT NULL,
-	      "email"	TEXT UNIQUE,
-	      PRIMARY KEY("id" AUTOINCREMENT)
-      );''';
-const createNoteTable = '''
-  CREATE TABLE "notes" (
-	  "id"	INTEGER NOT NULL,
-	  "user_id"	INTEGER,
-	  "text"	TEXT,
-	  "Field4"	INTEGER,
-	  FOREIGN KEY("user_id") REFERENCES "user"("id"),
-	  PRIMARY KEY("id")
-    );''';
