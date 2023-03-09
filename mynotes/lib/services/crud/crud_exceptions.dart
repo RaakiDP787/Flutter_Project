@@ -15,3 +15,5 @@ class CountNotUpdateNote implements Exception {}
 class CountNotFindNote implements Exception {}
 
 class CountNotDeleteNote implements Exception {}
+
+class UserShouldBeSetBeforeReadingNotes implements Exception {}
