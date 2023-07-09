@@ -52,51 +52,53 @@ class _LoginViewState extends State<LoginView> {
           ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                const Text(
-                    'Please login in to your account in order to interact with and create notes!'),
-                TextField(
-                  controller: _email,
-                  decoration:
-                      const InputDecoration(hintText: "Enter your email here"),
-                ),
-                TextField(
-                  controller: _password,
-                  obscureText: true,
-                  enableSuggestions: false,
-                  autocorrect: false,
-                  decoration: const InputDecoration(
-                      hintText: "Enter your password here"),
-                ),
-                TextButton(
-                  onPressed: () {
-                    final email = _email.text;
-                    final password = _password.text;
-                    context.read<AuthBloc>().add(AuthEventLogIn(
-                          email,
-                          password,
-                        ));
-                  },
-                  child: const Text('Login'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    context.read<AuthBloc>().add(
-                          const AuthEventForgotPassword(null),
-                        );
-                  },
-                  child: const Text('I forgot my password'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    context.read<AuthBloc>().add(
-                          const AuthEventShouldRegister(),
-                        );
-                  },
-                  child: const Text('Not Registered yet? Register here!'),
-                ),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const Text(
+                      'Please login in to your account in order to interact with and create notes!'),
+                  TextField(
+                    controller: _email,
+                    decoration: const InputDecoration(
+                        hintText: "Enter your email here"),
+                  ),
+                  TextField(
+                    controller: _password,
+                    obscureText: true,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    decoration: const InputDecoration(
+                        hintText: "Enter your password here"),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      final email = _email.text;
+                      final password = _password.text;
+                      context.read<AuthBloc>().add(AuthEventLogIn(
+                            email,
+                            password,
+                          ));
+                    },
+                    child: const Text('Login'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      context.read<AuthBloc>().add(
+                            const AuthEventForgotPassword(null),
+                          );
+                    },
+                    child: const Text('I forgot my password'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      context.read<AuthBloc>().add(
+                            const AuthEventShouldRegister(),
+                          );
+                    },
+                    child: const Text('Not Registered yet? Register here!'),
+                  ),
+                ],
+              ),
             ),
           ),
         ));
