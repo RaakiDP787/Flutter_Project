@@ -47,6 +47,8 @@ dependencies:
   flutter_bloc: ^8.1.2
   equatable: ^2.0.5
   flutter_launcher_icons: ^0.13.1
+  firebase_messaging: 
+  google_sign_in: ^6.1.4
 
 dev_dependencies:
   flutter_test:

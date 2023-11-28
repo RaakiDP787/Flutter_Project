@@ -12,6 +12,8 @@ import 'package:mynotes/views/notes/create_update_note_view.dart';
 import 'package:mynotes/views/notes/notes_view.dart';
 import 'package:mynotes/views/register_view.dart';
 import 'package:mynotes/views/verify_email_view.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -65,3 +67,49 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
+void registerNotificationCallbacks() {
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    // Handle foreground messages
+    print("Received a foreground message: ${message.notification?.body}");
+  });
+
+  Future<void> myBackgroundMessageHandler(RemoteMessage message) async {
+    print("Handling background message: ${message.data}");
+    // Perform any background processing or background tasks here
+  }
+
+  FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
+
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    // Handle notification when the app is opened from a terminated state
+    print(
+        "Opened the app from terminated state with message: ${message.notification?.body}");
+  });
+}
+
+Future<void> requestNotificationPermissions() async {
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  final fcmToken = await FirebaseMessaging.instance
+      .getToken(vapidKey: "9FRncvwvMLwuG70HRQsfPFs_fZc3fHOiFp7kHY-IPFI");
+  print(fcmToken);
+
+  FirebaseMessaging.instance.onTokenRefresh
+      .listen((fcmToken) {})
+      .onError((err) {
+    // Error getting token.
+  });
+}
+
+GoogleSignIn _googleSignIn = GoogleSignIn(
+  scopes: [
+    'email',
+    'https://www.googleapis.com/auth/contacts.readonly',
+  ],
+);
